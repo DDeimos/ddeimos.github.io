@@ -162,6 +162,35 @@
       font-size: 0.95em;
     }
 
+    .dates-link {
+      align-self: flex-end;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin: 2px 2px 0 0;
+      padding: 8px 14px;
+      border: 1px solid rgba(109, 86, 70, 0.18);
+      border-radius: 999px;
+      color: var(--soft-text);
+      background: rgba(255, 255, 255, 0.42);
+      box-shadow: 0 6px 16px rgba(60, 29, 34, 0.1);
+      font-size: 13px;
+      line-height: 1;
+      font-weight: 800;
+      text-decoration: none;
+      transition: transform 160ms ease, color 160ms ease, background 160ms ease;
+    }
+
+    .dates-link:hover,
+    .dates-link:focus-visible {
+      color: var(--text);
+      background: rgba(255, 255, 255, 0.7);
+    }
+
+    .dates-link:active {
+      transform: scale(0.97);
+    }
+
     @media (max-height: 720px) {
       body {
         align-items: flex-start;
@@ -196,6 +225,7 @@
       </nav>
 
       <p class="empty-note">Новые сказки можно добавлять отдельными папками в <code>stories/</code>, не удаляя старые открытки.</p>
+      <a class="dates-link" href="./dates/index.html">свидания</a>
     </section>
   </main>
 </body>
