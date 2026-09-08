@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Сказочная открытка о синем драконе с белыми глазами и водорослями на голове, который бережёт обломок корабля среди морских волн." />
+  <title>О благородном дракончике</title>
+  <style>
+    :root {
+      --paper-strong: rgba(255, 250, 236, 0.98);
+      --text: #26333a;
+      --soft-text: #657174;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      width: 100%;
+      min-height: 100%;
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+    }
+
+    body {
+      min-height: 100svh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+      background:
+        radial-gradient(ellipse at 76% 15%, rgba(119, 158, 166, 0.2), transparent 44%),
+        radial-gradient(ellipse at 16% 84%, rgba(102, 141, 132, 0.16), transparent 45%),
+        linear-gradient(155deg, #101c30 0%, #234451 54%, #627d7b 100%);
+    }
+
+    .app { width: min(100%, 480px); }
+
+    .story-card {
+      position: relative;
+      width: 100%;
+      min-height: 680px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 18px;
+      padding: 24px 18px 28px;
+      border: 1px solid rgba(255, 249, 228, 0.6);
+      border-radius: 34px;
+      background: linear-gradient(180deg, var(--paper-strong), #dae2d9);
+      box-shadow: 0 24px 70px rgba(7, 22, 35, 0.4);
+      overflow: hidden;
+      text-align: center;
+      animation: screenIn 360ms ease both;
+    }
+
+    @keyframes screenIn {
+      from { opacity: 0; transform: translateY(10px) scale(0.985); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .top-nav { width: 100%; display: flex; justify-content: flex-start; }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      min-height: 42px;
+      padding: 10px 15px;
+      border-radius: 999px;
+      color: #355967;
+      background: rgba(255, 255, 255, 0.65);
+      box-shadow: 0 8px 18px rgba(33, 62, 67, 0.11);
+      font-size: 15px;
+      font-weight: 850;
+      text-decoration: none;
+      transition: transform 150ms ease, background 150ms ease;
+    }
+
+    .back-link:hover { background: #fffdf2; }
+    .back-link:active { transform: scale(0.97); }
+    .back-link:focus-visible { outline: 3px solid #4b8190; outline-offset: 4px; }
+
+    h1 {
+      max-width: 390px;
+      margin: 0;
+      font-size: clamp(30px, 8vw, 42px);
+      line-height: 1.05;
+      letter-spacing: -0.045em;
+    }
+
+    .subtitle {
+      max-width: 100%;
+      margin: 0;
+      color: var(--soft-text);
+      font-size: clamp(16px, 4.2vw, 18px);
+      font-weight: 650;
+      line-height: 1.4;
+    }
+
+    .scene {
+      position: relative;
+      width: min(100%, 410px);
+      aspect-ratio: 21 / 22;
+      flex-shrink: 0;
+      border-radius: 30px;
+      overflow: hidden;
+      background: #173849;
+      box-shadow: 0 16px 32px rgba(17, 49, 64, 0.27);
+      isolation: isolate;
+    }
+
+    .scene svg { display: block; width: 100%; height: 100%; }
+    .scene::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      pointer-events: none;
+      box-shadow: inset 0 0 0 1px rgba(238, 248, 229, 0.23);
+      background: radial-gradient(ellipse at 50% 46%, transparent 48%, rgba(7, 22, 35, 0.38) 100%);
+    }
+
+    .water-control {
+      position: absolute;
+      z-index: 1;
+      inset: 44.5% 0 0;
+      width: 100%;
+      padding: 0;
+      border: 0;
+      border-radius: 0 0 30px 30px;
+      background: transparent;
+      appearance: none;
+      cursor: grab;
+      touch-action: pan-y pinch-zoom;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+    .water-control.is-dragging { cursor: grabbing; }
+    .water-control:focus-visible { outline: 2px solid #c7e3dc; outline-offset: -5px; }
+    .wave-hint { margin: 0; color: var(--soft-text); font-size: 14px; font-weight: 650; line-height: 1.4; }
+    [hidden] { display: none !important; }
+
+    .cloud { animation: cloudDrift 20s ease-in-out infinite alternate; }
+    @keyframes cloudDrift { from { transform: translateX(-8px); } to { transform: translateX(13px); } }
+    .star { animation: twinkle 5s ease-in-out infinite; }
+    @keyframes twinkle { 0%, 100% { opacity: 0.22; } 50% { opacity: 0.7; } }
+    .moonlight { animation: moonShimmer 6s ease-in-out infinite; }
+    @keyframes moonShimmer { 0%, 100% { opacity: 0.22; } 50% { opacity: 0.4; } }
+
+    /* All wave paths extend past the frame so horizontal motion leaves no gaps. */
+    .swell-far { animation: farSwell 9s ease-in-out infinite alternate; }
+    .swell-near { animation: nearSwell 6.5s ease-in-out infinite alternate; }
+    .swell-front { animation: frontSwell 7.4s ease-in-out infinite alternate; }
+    @keyframes farSwell { from { transform: translate(-10px, 0); } to { transform: translate(12px, 3px); } }
+    @keyframes nearSwell { from { transform: translate(12px, 2px); } to { transform: translate(-12px, -2px); } }
+    @keyframes frontSwell { from { transform: translate(-14px, 2px); } to { transform: translate(14px, -3px); } }
+
+    .dragon {
+      transform-box: view-box;
+      transform-origin: 211px 336px;
+      animation: dragonFloat 6.5s ease-in-out infinite;
+    }
+    @keyframes dragonFloat {
+      0%, 100% { transform: translateY(3px) rotate(-2deg); }
+      50% { transform: translateY(-5px) rotate(2deg); }
+    }
+    .dragon-head { transform-box: view-box; transform-origin: 211px 266px; animation: listenToSea 11s ease-in-out infinite; }
+    @keyframes listenToSea { 0%, 25%, 100% { transform: rotate(0deg); } 55%, 72% { transform: rotate(-2.5deg); } }
+    .tail { transform-box: view-box; transform-origin: 254px 334px; animation: tailSway 8s ease-in-out infinite; }
+    @keyframes tailSway { 0%, 100% { transform: rotate(-2deg); } 50% { transform: rotate(4deg); } }
+    .fin-left { transform-box: view-box; transform-origin: 174px 294px; animation: finLeft 7s ease-in-out infinite; }
+    .fin-right { transform-box: view-box; transform-origin: 250px 294px; animation: finRight 7s ease-in-out infinite; }
+    @keyframes finLeft { 0%, 100% { transform: rotate(0deg); } 50% { transform: rotate(-4deg); } }
+    @keyframes finRight { 0%, 100% { transform: rotate(0deg); } 50% { transform: rotate(4deg); } }
+
+    .kelp {
+      transform-box: view-box;
+      transform-origin: var(--root, 210px 144px);
+      animation: kelpSway var(--period, 5s) ease-in-out var(--delay, 0s) infinite alternate;
+    }
+    @keyframes kelpSway { from { transform: rotate(-4deg); } to { transform: rotate(5deg); } }
+    .driftwood { transform-box: fill-box; transform-origin: center; animation: woodFloat var(--period, 7s) ease-in-out var(--delay, 0s) infinite; }
+    @keyframes woodFloat {
+      0%, 100% { transform: translate(-3px, 2px) rotate(-4deg); }
+      50% { transform: translate(4px, -3px) rotate(5deg); }
+    }
+    .drop { opacity: 0; animation: fallingDrop 6.5s ease-in 1.8s infinite; }
+    @keyframes fallingDrop {
+      0%, 55%, 100% { opacity: 0; transform: translateY(0); }
+      58% { opacity: 0.7; transform: translateY(0); }
+      72% { opacity: 0.5; transform: translateY(126px); }
+      74%, 99% { opacity: 0; transform: translateY(132px); }
+    }
+    .ripple { transform-box: fill-box; transform-origin: center; animation: rippleSpread 6.5s ease-out 1.8s infinite; opacity: 0; }
+    @keyframes rippleSpread {
+      0%, 71%, 100% { opacity: 0; transform: scale(0.3); }
+      75% { opacity: 0.6; transform: scale(0.4); }
+      94%, 99% { opacity: 0; transform: scale(1.4); }
+    }
+
+    @media (max-height: 760px) {
+      body { align-items: flex-start; padding-top: 10px; padding-bottom: 10px; }
+      .story-card { min-height: calc(100svh - 20px); gap: 12px; padding-top: 18px; padding-bottom: 20px; }
+      .scene { width: min(100%, 350px); }
+      h1 { font-size: clamp(27px, 7.4vw, 36px); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .story-card, .scene * { animation: none !important; }
+      .back-link { transition: none; }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <article class="story-card">
+      <nav class="top-nav" aria-label="Навигация по сказкам">
+        <a class="back-link" href="../../">← к сказкам</a>
+      </nav>
+
+      <h1>О благородном дракончике</h1>
+      <p class="subtitle">Один слепой и спешный на решения дракончик сначала потопил корабль, а потом помогал его отсраивать.</p>
+
+      <section class="scene" id="scene" aria-label="Синий дракон с молочно-белыми слепыми глазами и водорослями на голове покачивается на волнах. В лапках он держит обломок корабля, вокруг плавают доски и сломанная мачта.">
+        <svg viewBox="0 0 420 440" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="sky" x2="0.2" y2="1">
+              <stop stop-color="#192e4b" />
+              <stop offset="0.55" stop-color="#557f8c" />
+              <stop offset="1" stop-color="#d2bfa8" />
+            </linearGradient>
+            <radialGradient id="moonHalo">
+              <stop stop-color="#e5efda" stop-opacity="0.5" />
+              <stop offset="1" stop-color="#dae9d9" stop-opacity="0" />
+            </radialGradient>
+            <linearGradient id="sea" x2="0.2" y2="1">
+              <stop stop-color="#527f8b" />
+              <stop offset="0.5" stop-color="#21546d" />
+              <stop offset="1" stop-color="#102d46" />
+            </linearGradient>
+            <linearGradient id="frontSea" x2="0.3" y2="1">
+              <stop stop-color="#397c88" />
+              <stop offset="0.55" stop-color="#20536a" />
+              <stop offset="1" stop-color="#132f49" />
+            </linearGradient>
+            <linearGradient id="gestureFoam" x1="0" y1="0" x2="1" y2="0">
+              <stop stop-color="#d2e9de" stop-opacity="0" />
+              <stop offset="0.3" stop-color="#b4dbd3" stop-opacity="0.45" />
+              <stop offset="0.5" stop-color="#e2f3e7" stop-opacity="0.95" />
+              <stop offset="0.7" stop-color="#b4dbd3" stop-opacity="0.45" />
+              <stop offset="1" stop-color="#d2e9de" stop-opacity="0" />
+            </linearGradient>
+            <radialGradient id="dragonBlue" cx="34%" cy="22%" r="88%">
+              <stop stop-color="#3d849f" />
+              <stop offset="0.38" stop-color="#1d5575" />
+              <stop offset="0.76" stop-color="#143452" />
+              <stop offset="1" stop-color="#0e2338" />
+            </radialGradient>
+            <linearGradient id="bodyBlue" x1="0" y1="0" x2="0.8" y2="1">
+              <stop stop-color="#326f87" />
+              <stop offset="0.5" stop-color="#1b4965" />
+              <stop offset="1" stop-color="#10283f" />
+            </linearGradient>
+            <linearGradient id="horn" x2="0.8" y2="1">
+              <stop stop-color="#a0b9b3" />
+              <stop offset="0.4" stop-color="#457b8c" />
+              <stop offset="1" stop-color="#162f49" />
+            </linearGradient>
+            <linearGradient id="headpieceMetal" x2="0.7" y2="1">
+              <stop stop-color="#345661" />
+              <stop offset="0.42" stop-color="#193542" />
+              <stop offset="1" stop-color="#0c2230" />
+            </linearGradient>
+            <radialGradient id="blindEye" cx="39%" cy="34%" r="73%">
+              <stop stop-color="#fffff4" />
+              <stop offset="0.47" stop-color="#e8eee3" />
+              <stop offset="0.8" stop-color="#c7d8d3" />
+              <stop offset="1" stop-color="#8caab0" />
+            </radialGradient>
+            <linearGradient id="belly" x2="0.7" y2="1">
+              <stop stop-color="#799d9f" />
+              <stop offset="1" stop-color="#385c6c" />
+            </linearGradient>
+            <linearGradient id="kelpGreen" x1="0" y1="0" x2="0.7" y2="1">
+              <stop stop-color="#a6b37a" />
+              <stop offset="0.4" stop-color="#7c965b" />
+              <stop offset="1" stop-color="#3d6850" />
+            </linearGradient>
+            <linearGradient id="wetWood" x2="0.8" y2="1">
+              <stop stop-color="#b3936b" />
+              <stop offset="0.42" stop-color="#816443" />
+              <stop offset="1" stop-color="#4c4237" />
+            </linearGradient>
+            <g id="scale">
+              <path d="M-5 -3Q0 -7 5 -3Q5 3 0 5Q-5 3 -5 -3Z" fill="#2c687f" stroke="#173f5a" stroke-width="0.9" />
+              <path d="M-3 -3Q0 -5 3 -3" fill="none" stroke="#86bdc2" stroke-width="1" stroke-linecap="round" opacity="0.55" />
+            </g>
+            <g id="plank">
+              <path d="M-37 -5L-27 -9L-18 -6L24 -9L37 -4L29 0L35 7L-24 9L-34 4L-28 1Z" fill="url(#wetWood)" stroke="#504536" stroke-width="1" />
+              <path d="M-24 -3L23 -4M-20 4L26 2M-30 0L-10 1" fill="none" stroke="#d0b086" stroke-width="1.2" stroke-linecap="round" opacity="0.55" />
+              <circle cx="-18" cy="0" r="1.6" fill="#354a4f" />
+              <circle cx="19" cy="-1" r="1.6" fill="#354a4f" />
+            </g>
+          </defs>
+
+          <!-- Quiet evening light after the storm. -->
+          <path d="M0 0H420V440H0Z" fill="url(#sky)" />
+          <circle cx="319" cy="69" r="84" fill="url(#moonHalo)" />
+          <circle cx="319" cy="69" r="22" fill="#e9ecda" />
+          <circle cx="311" cy="65" r="7" fill="#b5cec8" opacity="0.25" />
+          <circle cx="327" cy="78" r="4" fill="#b5cec8" opacity="0.25" />
+          <g fill="#f0efdb">
+            <circle class="star" cx="46" cy="43" r="1.2" />
+            <circle class="star" cx="104" cy="27" r="1" style="animation-delay: -2s" />
+            <circle class="star" cx="255" cy="30" r="1.3" style="animation-delay: -1s" />
+            <circle class="star" cx="382" cy="101" r="1" style="animation-delay: -3s" />
+          </g>
+          <g class="cloud" fill="#c2d1cc" opacity="0.18">
+            <path d="M-30 101Q17 90 47 99Q80 80 104 97Q134 91 151 104Q180 103 190 113H-30Z" />
+            <path d="M269 120Q291 108 319 116Q342 102 366 116Q397 109 448 124V130H269Z" />
+          </g>
+          <path d="M0 191L13 184L22 186L37 169L43 173L57 163L69 177L80 180L94 195Z" fill="#3f6373" opacity="0.6" />
+          <path d="M358 193L375 186L388 184L400 176L412 183L420 181V202Z" fill="#476977" opacity="0.55" />
+          <path d="M0 195Q110 190 209 195T420 193V440H0Z" fill="url(#sea)" />
+          <path d="M0 195Q110 190 209 195T420 193" fill="none" stroke="#c1c7b2" stroke-width="1.4" opacity="0.5" />
+
+          <g class="moonlight" fill="none" stroke="#e0dfbb" stroke-linecap="round" opacity="0.3">
+            <path d="M303 204H328M300 212H338M295 222H326M311 232H341M290 244H336" stroke-width="2" />
+            <path d="M296 258H346M307 273H353M279 290H343" stroke-width="3" />
+          </g>
+          <g class="swell-far" fill="none" stroke="#9ac0bb" stroke-linecap="round" opacity="0.38">
+            <path d="M-35 212Q-2 205 35 212T105 212M143 205Q165 201 188 206M354 213Q395 205 456 212" stroke-width="1.3" />
+            <path d="M-27 237Q2 224 36 234T102 234M323 235Q356 222 390 233T454 233" stroke-width="2" />
+            <path d="M17 251Q36 247 53 252M363 252Q379 249 397 253" stroke-width="1.2" />
+          </g>
+
+          <!-- A broken mast and a torn sail drift beyond the dragon. -->
+          <g transform="translate(349 273) rotate(13)">
+            <g class="driftwood" id="mastFloat" style="--period: 8.4s; --delay: -2s">
+              <path d="M-6 14L-10 -43L-7 -47L-4 -40L1 14Z" fill="#75604b" />
+              <path d="M-6 -40L-3 9" stroke="#b4a07b" stroke-width="1.5" />
+              <path d="M-4 -34L25 -7L15 -10L17 -2L9 -6L5 1L-1 -1Z" fill="#c5c6ab" opacity="0.86" />
+              <path d="M-4 -34L21 -10M-1 -5L-4 8" fill="none" stroke="#8b9b94" stroke-width="1.2" />
+              <use href="#plank" transform="translate(0 15) scale(0.7)" />
+            </g>
+          </g>
+          <g transform="translate(61 288) rotate(-10)">
+            <g class="driftwood" id="hullFloat" style="--period: 7.8s; --delay: -4s">
+              <path d="M-26 -2L-20 4L18 1L27 -6L23 10Q0 24 -22 13Z" fill="url(#wetWood)" stroke="#4f4a3b" stroke-width="1.5" />
+              <path d="M-25 -1L-28 -15L-24 -18L-19 4M12 3L15 -13L20 -12L17 7" fill="none" stroke="#988565" stroke-width="4" />
+              <path d="M-20 8Q1 15 22 3" fill="none" stroke="#ccaf80" stroke-width="1.4" />
+            </g>
+          </g>
+          <g class="swell-near">
+            <path d="M-50 309Q-14 286 26 303T107 303T188 303T269 303T350 303T470 300V470H-50Z" fill="#255970" />
+            <path d="M-50 309Q-14 286 26 303T107 303T188 303T269 303T350 303T470 300" fill="none" stroke="#79adaf" stroke-width="2.4" opacity="0.62" />
+            <path d="M28 310Q56 320 85 309M345 315Q367 325 389 317" fill="none" stroke="#aec9bd" stroke-width="1.2" opacity="0.42" />
+          </g>
+
+          <g id="backGestureWaves" fill="none" stroke="url(#gestureFoam)" stroke-linecap="round" pointer-events="none"></g>
+
+          <!-- One floating rig keeps the paws and the ship fragment together. -->
+          <g class="dragon" id="dragonFloat">
+            <g class="tail">
+              <path d="M242 320Q273 355 306 339Q329 330 326 302Q344 319 329 341Q304 379 247 352Z" fill="url(#bodyBlue)" stroke="#14354f" stroke-width="2" />
+              <path d="M277 350Q316 361 329 329" fill="none" stroke="#689fa6" stroke-width="3" opacity="0.6" />
+              <path d="M280 344L285 331L294 346M303 342L314 327L316 339M321 327L336 316L328 337" fill="#2b6077" stroke="#163f57" stroke-width="1.2" />
+              <path d="M326 309Q315 302 317 286L327 295L334 286Q341 301 328 317Z" fill="#4b8896" stroke="#1f4d68" stroke-width="1.5" />
+              <path d="M326 310L326 296M327 310L334 293" stroke="#8bb5b4" stroke-width="1" opacity="0.65" />
+            </g>
+            <g class="fin-left">
+              <path d="M179 278L132 249Q138 264 130 278Q148 273 151 294Q162 286 179 305Z" fill="#244b68" stroke="#16364e" stroke-width="2" />
+              <path d="M177 294L136 255M175 294L133 278M176 296L152 292" stroke="#538b9d" stroke-width="1.5" fill="none" />
+            </g>
+            <g class="fin-right">
+              <path d="M244 278L291 249Q285 264 293 278Q275 273 272 294Q261 286 244 305Z" fill="#244b68" stroke="#16364e" stroke-width="2" />
+              <path d="M246 294L287 255M248 294L290 278M247 296L272 292" stroke="#538b9d" stroke-width="1.5" fill="none" />
+            </g>
+            <path d="M179 268Q211 253 243 268Q262 300 254 336Q248 365 211 366Q174 365 166 338Q158 305 179 268Z" fill="url(#bodyBlue)" stroke="#16384f" stroke-width="2" />
+            <ellipse cx="211" cy="315" rx="28" ry="40" fill="url(#belly)" />
+            <g fill="none" stroke="#254b60" stroke-width="2" opacity="0.65">
+              <path d="M190 287Q211 299 232 287M186 300Q210 314 237 300M185 315Q211 329 238 315M189 330Q211 342 234 330M197 346Q211 351 225 346" />
+            </g>
+            <g>
+              <use href="#scale" transform="translate(176 310) rotate(-20)" />
+              <use href="#scale" transform="translate(174 324) rotate(-15)" />
+              <use href="#scale" transform="translate(181 337)" />
+              <use href="#scale" transform="translate(248 310) rotate(20)" />
+              <use href="#scale" transform="translate(248 325) rotate(15)" />
+              <use href="#scale" transform="translate(241 338)" />
+            </g>
+
+            <!-- Broad little webbed feet, as on the reference figurine. -->
+            <g>
+              <path d="M181 332Q164 320 151 333L138 351Q137 361 151 364L177 366Q192 359 190 346Z" fill="url(#bodyBlue)" stroke="#15354e" stroke-width="2" />
+              <path d="M153 339L151 354M166 339L165 358M178 346L177 360" stroke="#5a96a4" stroke-width="2" stroke-linecap="round" />
+              <path d="M142 351Q130 351 134 361L144 358M153 359Q145 363 151 368L159 363M173 362Q168 370 177 369L181 363" fill="#a9bbb4" stroke="#30586a" stroke-width="1" />
+              <use href="#scale" transform="translate(159 333) rotate(-10)" />
+              <use href="#scale" transform="translate(174 340)" />
+              <path d="M241 332Q258 320 271 333L284 351Q285 361 271 364L245 366Q230 359 232 346Z" fill="url(#bodyBlue)" stroke="#15354e" stroke-width="2" />
+              <path d="M269 339L271 354M256 339L257 358M244 346L245 360" stroke="#5a96a4" stroke-width="2" stroke-linecap="round" />
+              <path d="M280 351Q292 351 288 361L278 358M269 359Q277 363 271 368L263 363M249 362Q254 370 245 369L241 363" fill="#a9bbb4" stroke="#30586a" stroke-width="1" />
+              <use href="#scale" transform="translate(263 333) rotate(10)" />
+              <use href="#scale" transform="translate(248 340)" />
+            </g>
+
+            <!-- A jagged part of the hull: planks, ribs, iron nails, and old rope. -->
+            <g transform="rotate(-20 211 311)">
+              <path d="M189 272L199 280L205 271L211 278L221 272L228 345L219 341L212 351L206 343L197 350Z" fill="url(#wetWood)" stroke="#4e4032" stroke-width="2" />
+              <path d="M201 280L209 342M211 281L219 338" stroke="#4c4135" stroke-width="2" />
+              <path d="M194 284L200 320M214 284L218 310M202 330L204 341" stroke="#c2a27a" stroke-width="1.7" stroke-linecap="round" opacity="0.7" />
+              <path d="M194 297Q214 288 235 296L232 303Q214 298 195 304Z" fill="#9b805b" stroke="#594a35" stroke-width="1.3" />
+              <path d="M197 325Q218 316 234 322L234 330Q216 325 198 332Z" fill="#9b805b" stroke="#594a35" stroke-width="1.3" />
+              <circle cx="202" cy="298" r="2.2" fill="#374e55" />
+              <circle cx="222" cy="297" r="2.2" fill="#374e55" />
+              <circle cx="207" cy="325" r="2" fill="#374e55" />
+              <path d="M191 310Q206 315 229 307M192 314Q210 320 231 312" fill="none" stroke="#c4b38a" stroke-width="2.2" />
+              <path d="M228 308Q244 308 238 320Q233 330 246 338" fill="none" stroke="#b5a17b" stroke-width="2" stroke-linecap="round" />
+            </g>
+            <path d="M176 276Q160 278 166 295Q173 309 187 305L200 295Q203 287 194 284L182 288Z" fill="url(#bodyBlue)" stroke="#183f57" stroke-width="1.6" />
+            <path d="M246 278Q263 283 255 301Q248 314 235 313L223 304Q220 296 229 293L242 298Z" fill="url(#bodyBlue)" stroke="#183f57" stroke-width="1.6" />
+            <g fill="#b4c6be" stroke="#31586a" stroke-width="1">
+              <path d="M189 288Q194 284 200 289L194 293Z M186 295Q193 292 196 297L189 300Z M230 297Q224 292 222 299L228 303Z M234 304Q228 300 226 306L233 310Z" />
+            </g>
+            <use href="#scale" transform="translate(177 288) rotate(-25)" />
+            <use href="#scale" transform="translate(246 291) rotate(25)" />
+
+            <g class="dragon-head">
+              <!-- Seaweed rooted around the crown, behind and in front of the horns. -->
+              <g class="kelp" style="--root: 207px 147px; --period: 6.8s">
+                <path d="M192 147C164 112 174 76 198 80C225 84 228 113 214 144L208 145C219 113 215 91 198 89C181 87 179 116 201 145Z" fill="#56794f" />
+                <path d="M205 144C207 111 230 83 248 100C267 119 241 144 246 169C232 149 255 123 243 108C231 94 216 120 215 145Z" fill="#54754b" />
+                <path d="M186 147C154 134 142 110 155 99C169 86 190 109 191 133C182 115 166 102 160 107C154 115 171 132 193 139Z" fill="#708955" />
+              </g>
+
+              <!-- Curved horns and the small, ridged cheek fins. -->
+              <path d="M151 175Q129 153 131 119Q139 120 143 132Q140 151 165 161Z" fill="url(#horn)" stroke="#264b60" stroke-width="1.8" />
+              <path d="M272 175Q294 153 292 119Q284 120 280 132Q283 151 258 161Z" fill="url(#horn)" stroke="#264b60" stroke-width="1.8" />
+              <path d="M134 123Q131 144 149 161M289 123Q292 144 274 161" fill="none" stroke="#b5ccc4" stroke-width="2" stroke-linecap="round" opacity="0.65" />
+              <path d="M151 190L124 166L125 188L112 182L121 207L110 203L120 226L112 225L126 244L121 247L146 258Z" fill="url(#bodyBlue)" stroke="#173b53" stroke-width="1.5" />
+              <path d="M272 190L299 166L298 188L311 182L302 207L313 203L303 226L311 225L297 244L302 247L277 258Z" fill="url(#bodyBlue)" stroke="#173b53" stroke-width="1.5" />
+              <g fill="none" stroke="#71a8af" stroke-width="2" stroke-linecap="round" opacity="0.65">
+                <path d="M125 175L143 196M120 192L139 208M120 213L139 224M126 237L142 243M298 175L280 196M303 192L284 208M303 213L284 224M297 237L281 243" />
+              </g>
+              <path d="M147 177Q165 156 187 157L191 147L207 154L220 146L235 157Q262 154 280 179Q292 196 290 223Q299 247 279 264Q257 282 230 275Q211 283 193 275Q163 282 142 264Q124 249 131 228Q125 196 147 177Z" fill="url(#dragonBlue)" stroke="#14364f" stroke-width="2.6" />
+              <path d="M146 188Q155 168 179 166M244 165Q270 164 280 188" fill="none" stroke="#7eb5bd" stroke-width="2.5" stroke-linecap="round" opacity="0.55" />
+
+              <!-- The eyes are completely milky white, with no irises or pupils. -->
+              <ellipse cx="171" cy="221" rx="31" ry="35" transform="rotate(-12 171 221)" fill="#0d263b" stroke="#47778c" stroke-width="3.5" />
+              <ellipse cx="251" cy="221" rx="31" ry="35" transform="rotate(12 251 221)" fill="#0d263b" stroke="#47778c" stroke-width="3.5" />
+              <ellipse cx="171" cy="222" rx="25" ry="29" transform="rotate(-12 171 222)" fill="url(#blindEye)" />
+              <ellipse cx="251" cy="222" rx="25" ry="29" transform="rotate(12 251 222)" fill="url(#blindEye)" />
+              <path d="M154 210Q156 201 163 200M234 210Q236 201 243 200" fill="none" stroke="#fffff5" stroke-width="3" stroke-linecap="round" opacity="0.45" />
+              <path d="M139 207Q145 179 172 182Q188 181 197 202M225 202Q234 181 250 182Q277 179 283 207" fill="none" stroke="#285e7c" stroke-width="9" stroke-linecap="round" />
+              <path d="M142 200Q151 181 174 185M248 185Q271 182 280 200" fill="none" stroke="#5c9ba9" stroke-width="2.2" stroke-linecap="round" />
+
+              <g>
+                <use href="#scale" transform="translate(151 178) rotate(-24) scale(1.2)" />
+                <use href="#scale" transform="translate(168 174) rotate(-15) scale(1.1)" />
+                <use href="#scale" transform="translate(185 180) rotate(20)" />
+                <use href="#scale" transform="translate(270 178) rotate(24) scale(1.2)" />
+                <use href="#scale" transform="translate(253 174) rotate(15) scale(1.1)" />
+                <use href="#scale" transform="translate(236 180) rotate(-20)" />
+                <use href="#scale" transform="translate(210 184) scale(0.9)" />
+                <use href="#scale" transform="translate(210 198) scale(0.8)" />
+                <use href="#scale" transform="translate(138 232) rotate(-18) scale(0.75)" />
+                <use href="#scale" transform="translate(145 248) rotate(-26) scale(0.9)" />
+                <use href="#scale" transform="translate(160 259) rotate(-10)" />
+                <use href="#scale" transform="translate(177 264) scale(0.85)" />
+                <use href="#scale" transform="translate(285 232) rotate(18) scale(0.75)" />
+                <use href="#scale" transform="translate(278 248) rotate(26) scale(0.9)" />
+                <use href="#scale" transform="translate(263 259) rotate(10)" />
+                <use href="#scale" transform="translate(246 264) scale(0.85)" />
+              </g>
+
+              <path d="M182 250Q185 235 199 238Q211 230 224 238Q239 236 242 250Q239 266 212 266Q188 267 182 250Z" fill="url(#bodyBlue)" stroke="#173c55" stroke-width="1.4" />
+              <path d="M193 244Q199 240 203 244M219 244Q224 240 230 245" fill="none" stroke="#538fa2" stroke-width="2" stroke-linecap="round" />
+              <ellipse cx="199" cy="247" rx="3.2" ry="2.1" fill="#112e46" transform="rotate(-18 199 247)" />
+              <ellipse cx="224" cy="247" rx="3.2" ry="2.1" fill="#112e46" transform="rotate(18 224 247)" />
+              <path d="M193 257Q211 265 231 256" fill="none" stroke="#0e2b40" stroke-width="1.8" stroke-linecap="round" />
+              <path d="M201 267Q211 271 221 267" fill="none" stroke="#67959e" stroke-width="1.5" stroke-linecap="round" opacity="0.6" />
+
+              <g class="kelp" style="--root: 185px 145px; --period: 5.8s; --delay: -2s">
+                <path d="M191 143C179 121 164 126 162 146C160 168 170 189 156 207C161 190 153 169 155 147C157 119 181 112 198 142Z" fill="url(#kelpGreen)" />
+                <path d="M183 139C169 137 146 140 147 158C148 170 157 180 148 193C150 179 139 173 140 158C139 138 165 129 182 132Z" fill="#72915d" />
+                <path d="M181 133C166 128 158 143 160 163" fill="none" stroke="#bbc491" stroke-width="1.5" stroke-linecap="round" opacity="0.65" />
+              </g>
+              <g class="kelp" style="--root: 230px 144px; --period: 6.4s; --delay: -1.5s">
+                <path d="M225 140C243 115 263 126 263 146C263 169 249 190 259 207C245 197 251 175 255 154C261 129 244 127 235 146Z" fill="url(#kelpGreen)" />
+                <path d="M238 144C265 130 282 136 280 158C278 181 267 199 274 216C261 202 269 184 272 166C279 143 263 139 244 150Z" fill="#6d8b57" />
+                <path d="M241 138C256 124 268 137 259 161" fill="none" stroke="#c0c799" stroke-width="1.8" stroke-linecap="round" opacity="0.6" />
+              </g>
+              <g class="kelp" style="--root: 211px 140px; --period: 7.1s; --delay: -3s">
+                <path d="M205 145C195 122 195 104 212 103C230 102 245 122 232 144C232 124 221 108 212 112C203 115 205 130 214 144Z" fill="url(#kelpGreen)" />
+                <path d="M219 137C229 142 232 157 223 177C225 158 218 153 213 145Z" fill="#93a571" />
+                <path d="M199 137C189 147 192 160 198 171C187 164 181 150 191 138Z" fill="#90a06b" />
+                <path d="M207 108Q221 103 231 124" fill="none" stroke="#c1c89a" stroke-width="1.7" stroke-linecap="round" opacity="0.55" />
+              </g>
+              <!-- A separate metal circlet covers the kelp roots, like the reference ornament. -->
+              <g id="headpiece">
+                <path d="M157 148Q182 138 211 139Q241 138 267 149L263 170Q236 187 211 186Q182 184 160 170Z" fill="#0a2638" opacity="0.42" />
+                <path d="M155 140Q177 130 211 132Q245 130 269 141L265 163Q241 178 211 177Q180 177 158 163Z" fill="url(#headpieceMetal)" stroke="#102b3b" stroke-width="2" />
+                <path d="M156 141Q177 151 211 152Q245 152 268 142M159 162Q181 173 211 173Q242 174 264 163" fill="none" stroke="#52747b" stroke-width="1.6" opacity="0.8" />
+                <path d="M173 137L188 131L211 115L233 131L250 137L246 163L232 176L211 183L190 175L176 162Z" fill="url(#headpieceMetal)" stroke="#102734" stroke-width="2.3" stroke-linejoin="round" />
+                <path d="M174 137L188 132L211 116L233 132L249 138" fill="none" stroke="#72918f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="0.65" />
+                <path d="M178 143L181 160L193 171L211 177L230 171L242 160L246 143" fill="none" stroke="#365b69" stroke-width="1.5" stroke-linejoin="round" />
+                <path d="M184 149L211 131L239 150M187 162L211 145L236 163" fill="none" stroke="#0b222e" stroke-width="4" stroke-linejoin="round" />
+                <path d="M184 148L211 130L239 149M187 161L211 144L236 162" fill="none" stroke="#4a787b" stroke-width="2" stroke-linejoin="round" opacity="0.8" />
+                <path d="M193 169L211 157L229 170" fill="none" stroke="#335b65" stroke-width="1.5" stroke-linejoin="round" />
+                <circle cx="163" cy="153" r="1.8" fill="#69898a" />
+                <circle cx="261" cy="153" r="1.8" fill="#69898a" />
+              </g>
+              <ellipse class="drop" cx="155" cy="208" rx="1.6" ry="3.3" fill="#c7e3dc" />
+            </g>
+          </g>
+
+          <!-- The front swell partly covers the feet and tail, seating him in the water. -->
+          <g class="swell-front">
+            <path d="M-60 364Q-25 344 13 357T85 357Q120 347 153 359Q193 375 228 365Q267 352 300 362T370 360T480 363V480H-60Z" fill="url(#frontSea)" opacity="0.94" />
+            <path d="M-60 364Q-25 344 13 357T85 357Q120 347 153 359Q193 375 228 365Q267 352 300 362T370 360T480 363" fill="none" stroke="#96beba" stroke-width="2.6" opacity="0.72" />
+            <path d="M128 362Q149 359 163 366M169 369Q185 373 200 371M244 365Q263 359 283 365M310 369Q326 375 344 369" fill="none" stroke="#d0ded0" stroke-width="1.6" stroke-linecap="round" opacity="0.75" />
+            <path d="M-34 391Q-3 377 29 389T92 389M172 397Q205 382 238 393T301 393M353 391Q394 374 452 393" fill="none" stroke="#659da4" stroke-width="2" opacity="0.6" />
+          </g>
+          <ellipse class="ripple" cx="155" cy="351" rx="15" ry="3" fill="none" stroke="#c0dcd4" stroke-width="1.1" />
+
+          <g transform="translate(75 391) rotate(-14)">
+            <g class="driftwood" id="plankFloat" style="--period: 6.6s; --delay: -1s">
+              <ellipse cy="7" rx="45" ry="6" fill="#112f43" opacity="0.32" />
+              <use href="#plank" transform="scale(1.15)" />
+              <path d="M-9 -8L-7 9M-5 -8L-3 9" stroke="#cfbe95" stroke-width="2" />
+              <path d="M-7 9Q-3 23 9 15" fill="none" stroke="#b8a57d" stroke-width="1.6" stroke-linecap="round" />
+            </g>
+          </g>
+          <g transform="translate(341 410) rotate(8)">
+            <g class="driftwood" id="bowFloat" style="--period: 8.2s; --delay: -3s">
+              <ellipse cy="7" rx="47" ry="6" fill="#0b2339" opacity="0.35" />
+              <path d="M-37 -7L-27 1L-16 -3L22 -1L38 -15L34 3Q6 25 -26 13Z" fill="url(#wetWood)" stroke="#4b4538" stroke-width="1.6" />
+              <path d="M-30 2Q0 20 31 0M-23 7L-24 -15L-20 -17L-16 9M12 11L18 -10L23 -12L18 9" fill="none" stroke="#c0a67c" stroke-width="2.4" />
+              <circle cx="-16" cy="6" r="2" fill="#384c50" />
+              <circle cx="19" cy="4" r="2" fill="#384c50" />
+            </g>
+          </g>
+          <g class="swell-near" fill="none" stroke-linecap="round">
+            <path d="M-28 420Q4 406 33 419M102 424Q129 414 154 424M185 419Q210 414 230 421M267 437Q301 426 326 435M373 435Q399 423 447 435" stroke="#6098a0" stroke-width="2" opacity="0.65" />
+            <path d="M31 403L42 402M94 401L109 398M315 426Q331 430 349 426" stroke="#b5cbc3" stroke-width="1.3" opacity="0.5" />
+          </g>
+          <g id="frontGestureWaves" fill="none" stroke="url(#gestureFoam)" stroke-linecap="round" pointer-events="none"></g>
+        </svg>
+        <button class="water-control" id="waterControl" type="button" aria-label="Поднять волну" aria-describedby="waveHint" aria-keyshortcuts="ArrowLeft ArrowRight" hidden></button>
+      </section>
+      <p class="wave-hint" id="waveHint" hidden>Коснись воды, чтобы покачать дракончика. Но не слишком сильно, иначе его укачает.</p>
+    </article>
+  </main>
+
+  <script>
+  (function () {
+    "use strict";
+
+    var scene = document.getElementById("scene");
+    var control = document.getElementById("waterControl");
+    var reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    var svgNS = "http://www.w3.org/2000/svg";
+    var backLayer = document.getElementById("backGestureWaves");
+    var frontLayer = document.getElementById("frontGestureWaves");
+    var rows = [
+      { y: 250, depth: 0.35, layer: backLayer },
+      { y: 303, depth: 0.58, layer: backLayer },
+      { y: 365, depth: 0.85, layer: frontLayer },
+      { y: 414, depth: 1, layer: frontLayer }
+    ];
+    var waves = [];
+    var frameId = 0;
+    var stillTimer = 0;
+    var gesture = null;
+    var suppressClickUntil = 0;
+    var lifetime = 3.2;
+
+    // Extra motion belongs to wrappers, leaving every original idle animation intact.
+    // x is the position in the sea; cx/cy are the pivot in each actor's local coordinates.
+    var floaters = [
+      { id: "dragonFloat", x: 211, cx: 211, cy: 336, depth: 0.85, gain: 0.72 },
+      { id: "mastFloat", x: 349, cx: 0, cy: 15, depth: 0.5, gain: 1 },
+      { id: "hullFloat", x: 61, cx: 0, cy: 9, depth: 0.55, gain: 1 },
+      { id: "plankFloat", x: 75, cx: 0, cy: 0, depth: 0.92, gain: 1 },
+      { id: "bowFloat", x: 341, cx: 0, cy: 5, depth: 1, gain: 1 }
+    ];
+    floaters.forEach(function (item) {
+      var actor = document.getElementById(item.id);
+      item.wrapper = document.createElementNS(svgNS, "g");
+      actor.parentNode.insertBefore(item.wrapper, actor);
+      item.wrapper.appendChild(actor);
+    });
+
+    function clamp(value, min, max) { return Math.max(min, Math.min(max, value)); }
+
+    function waveHeight(x, wave) {
+      var distance = (x - wave.center) / 55;
+      return Math.exp(-distance * distance) * Math.cos(distance * 2.2) * wave.energy * 12;
+    }
+
+    function surfaceHeight(x, depth) {
+      return waves.reduce(function (height, wave) { return height + waveHeight(x, wave) * depth; }, 0);
+    }
+
+    function drawWave(wave, age) {
+      wave.center = wave.x + wave.direction * age * 150;
+      wave.energy = wave.strength * Math.min(1, age / 0.18) * Math.pow(Math.max(0, 1 - age / lifetime), 1.2);
+      wave.paths.forEach(function (path, index) {
+        var row = rows[index];
+        var points = [];
+        for (var offset = -110; offset <= 110; offset += 10) {
+          var x = wave.center + offset;
+          var y = row.y + Math.sin(x / 28) * 2 - waveHeight(x, wave) * row.depth;
+          points.push((offset === -110 ? "M" : "L") + x.toFixed(1) + " " + y.toFixed(1));
+        }
+        path.setAttribute("d", points.join(" "));
+        path.setAttribute("opacity", Math.min(0.9, wave.energy * 1.3).toFixed(3));
+      });
+    }
+
+    function removeWave(wave) { wave.paths.forEach(function (path) { path.remove(); }); }
+
+    function resetFloaters() {
+      floaters.forEach(function (item) { item.wrapper.removeAttribute("transform"); });
+    }
+
+    function stopWaves() {
+      window.cancelAnimationFrame(frameId);
+      window.clearTimeout(stillTimer);
+      frameId = 0;
+      stillTimer = 0;
+      waves.forEach(removeWave);
+      waves = [];
+      resetFloaters();
+    }
+
+    function frame(now) {
+      frameId = 0;
+      waves = waves.filter(function (wave) {
+        var age = (now - wave.created) / 1000;
+        if (age >= lifetime) { removeWave(wave); return false; }
+        drawWave(wave, age);
+        return true;
+      });
+      if (!waves.length) { resetFloaters(); return; }
+
+      floaters.forEach(function (item) {
+        var lift = clamp(surfaceHeight(item.x, item.depth), -11, 11) * item.gain;
+        var slope = surfaceHeight(item.x + 12, item.depth) - surfaceHeight(item.x - 12, item.depth);
+        var lean = clamp(-slope * 0.48, -5, 5) * item.gain;
+        item.wrapper.setAttribute("transform", "translate(0 " + (-lift).toFixed(2) + ") rotate(" + lean.toFixed(2) + " " + item.cx + " " + item.cy + ")");
+      });
+      frameId = window.requestAnimationFrame(frame);
+    }
+
+    function raiseWave(x, direction, strength) {
+      if (reducedMotion.matches) stopWaves();
+      if (waves.length === 3) removeWave(waves.shift());
+      var wave = { x: x, direction: direction, strength: strength, created: performance.now(), center: x, energy: 0 };
+      wave.paths = rows.map(function (row) {
+        var path = document.createElementNS(svgNS, "path");
+        path.setAttribute("stroke-width", (1.2 + row.depth * 1.6).toFixed(1));
+        row.layer.appendChild(path);
+        return path;
+      });
+      waves.push(wave);
+      if (reducedMotion.matches) {
+        // A brief stationary crest acknowledges input without moving the scene.
+        drawWave(wave, 0.3);
+        stillTimer = window.setTimeout(stopWaves, 650);
+      } else if (!frameId) {
+        frameId = window.requestAnimationFrame(frame);
+      }
+    }
+
+    function seaX(event) {
+      var bounds = scene.getBoundingClientRect();
+      return clamp((event.clientX - bounds.left) / bounds.width * 420, 0, 420);
+    }
+
+    function endGesture() {
+      if (!gesture) return;
+      var pointerId = gesture.id;
+      if (gesture.dragging || gesture.cancelled) suppressClickUntil = performance.now() + 500;
+      gesture = null;
+      control.classList.remove("is-dragging");
+      if (control.hasPointerCapture(pointerId)) control.releasePointerCapture(pointerId);
+    }
+
+    control.addEventListener("pointerdown", function (event) {
+      if (!event.isPrimary || event.button !== 0 || gesture) return;
+      gesture = { id: event.pointerId, startX: event.clientX, startY: event.clientY, waveX: seaX(event), emitted: -Infinity, dragging: false, cancelled: false };
+      control.setPointerCapture(event.pointerId);
+    });
+
+    control.addEventListener("pointermove", function (event) {
+      if (!gesture || event.pointerId !== gesture.id) return;
+      var dx = event.clientX - gesture.startX;
+      var dy = event.clientY - gesture.startY;
+      if (!gesture.dragging) {
+        // Leave vertical gestures to native scrolling; do not turn them into waves.
+        if (Math.abs(dy) > 8 && Math.abs(dy) > Math.abs(dx)) {
+          gesture.cancelled = true;
+          endGesture();
+          return;
+        }
+        if (Math.abs(dx) < 8) return;
+        gesture.dragging = true;
+        control.classList.add("is-dragging");
+      }
+      var x = seaX(event);
+      var distance = x - gesture.waveX;
+      var now = performance.now();
+      if (Math.abs(distance) < 12 || now - gesture.emitted < 140) return;
+      raiseWave(gesture.waveX, distance > 0 ? 1 : -1, clamp(Math.abs(distance) / 85, 0.4, 0.9));
+      gesture.waveX = x;
+      gesture.emitted = now;
+    });
+
+    control.addEventListener("pointerup", function (event) {
+      if (gesture && event.pointerId === gesture.id) endGesture();
+    });
+    control.addEventListener("pointercancel", function (event) {
+      if (gesture && event.pointerId === gesture.id) { gesture.cancelled = true; endGesture(); }
+    });
+    control.addEventListener("lostpointercapture", function (event) {
+      if (gesture && event.pointerId === gesture.id) { gesture.cancelled = true; endGesture(); }
+    });
+    control.addEventListener("click", function (event) {
+      if (event.detail !== 0 && performance.now() < suppressClickUntil) return;
+      var x = event.detail === 0 ? 50 : seaX(event);
+      raiseWave(x, x < 210 ? 1 : -1, 0.65);
+    });
+    control.addEventListener("keydown", function (event) {
+      if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
+      event.preventDefault();
+      var right = event.key === "ArrowRight";
+      raiseWave(right ? 45 : 375, right ? 1 : -1, 0.75);
+    });
+
+    reducedMotion.addEventListener("change", stopWaves);
+    window.addEventListener("blur", endGesture);
+    document.addEventListener("visibilitychange", function () {
+      if (document.hidden) { endGesture(); stopWaves(); }
+    });
+    control.hidden = false;
+    document.getElementById("waveHint").hidden = false;
+  })();
+  </script>
+</body>
+</html>
