@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Сказочная открытка о кролике с белой бабочкой, который продавал морковку на солнечной ярмарке." />
+  <title>Как кролик продавал морковку</title>
+  <style>
+    :root {
+      --paper-strong: rgba(255, 250, 236, 0.98);
+      --text: #30241a;
+      --soft-text: #76634f;
+      --green: #315849;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      width: 100%;
+      min-height: 100%;
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+    }
+
+    body {
+      min-height: 100svh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+      background:
+        radial-gradient(ellipse at 70% 12%, rgba(241, 184, 85, 0.24), transparent 45%),
+        radial-gradient(ellipse at 12% 85%, rgba(138, 162, 97, 0.2), transparent 44%),
+        linear-gradient(155deg, #172f30 0%, #3e5240 52%, #886145 100%);
+    }
+
+    .app { width: min(100%, 480px); }
+
+    .story-card {
+      position: relative;
+      width: 100%;
+      min-height: 680px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 18px;
+      padding: 24px 18px 26px;
+      border: 1px solid rgba(255, 245, 221, 0.65);
+      border-radius: 34px;
+      background: linear-gradient(180deg, var(--paper-strong), #efdfbe);
+      box-shadow: 0 24px 70px rgba(18, 30, 26, 0.38);
+      overflow: hidden;
+      text-align: center;
+      animation: screenIn 360ms ease both;
+    }
+
+    @keyframes screenIn {
+      from { opacity: 0; transform: translateY(10px) scale(0.985); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .top-nav { width: 100%; display: flex; justify-content: flex-start; }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      min-height: 42px;
+      padding: 10px 15px;
+      border-radius: 999px;
+      color: var(--green);
+      background: rgba(255, 255, 255, 0.65);
+      box-shadow: 0 8px 18px rgba(78, 57, 32, 0.1);
+      font-size: 15px;
+      font-weight: 850;
+      text-decoration: none;
+      transition: transform 150ms ease, background 150ms ease;
+    }
+
+    .back-link:hover { background: #fffaf0; }
+    .back-link:active, .buy-button:active { transform: scale(0.97); }
+    .back-link:focus-visible, .buy-button:focus-visible { outline: 3px solid #ba652b; outline-offset: 4px; }
+
+    h1 {
+      max-width: 390px;
+      margin: 0;
+      font-size: clamp(30px, 8vw, 42px);
+      line-height: 1.05;
+      letter-spacing: -0.045em;
+    }
+
+    .subtitle {
+      max-width: 100%;
+      margin: 0;
+      font-size: clamp(16px, 4.2vw, 18px);
+      line-height: 1.4;
+      color: var(--soft-text);
+      font-weight: 650;
+    }
+
+    .scene {
+      position: relative;
+      width: min(100%, 410px);
+      aspect-ratio: 21 / 22;
+      flex-shrink: 0;
+      border-radius: 30px;
+      overflow: hidden;
+      background: #bcd9c5;
+      box-shadow: 0 16px 32px rgba(95, 65, 32, 0.2);
+      isolation: isolate;
+    }
+
+    .scene svg { width: 100%; height: 100%; display: block; }
+    .scene::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      border-radius: inherit;
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.35);
+      background: radial-gradient(ellipse at 50% 45%, transparent 55%, rgba(91, 64, 27, 0.16) 100%);
+    }
+
+    .cloud { animation: cloudDrift 18s ease-in-out infinite alternate; }
+    .cloud-far { animation-delay: -9s; }
+    @keyframes cloudDrift { from { transform: translateX(-9px); } to { transform: translateX(13px); } }
+
+    .pennant { transform-box: fill-box; transform-origin: center top; animation: flutter 3.2s ease-in-out infinite alternate; }
+    .pennant:nth-child(2n) { animation-delay: -1.4s; }
+    @keyframes flutter { from { transform: rotate(-5deg); } to { transform: rotate(7deg); } }
+
+    /* Keep the necktie with the body; the head and ears move independently. */
+    .rabbit-body { transform-box: view-box; transform-origin: 210px 321px; animation: breathe 3.6s ease-in-out infinite; }
+    @keyframes breathe { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-2px); } }
+    .rabbit-head { transform-box: view-box; transform-origin: 210px 261px; animation: headTilt 7.2s ease-in-out infinite; }
+    @keyframes headTilt { 0%, 35%, 100% { transform: rotate(0deg); } 55%, 72% { transform: rotate(-4deg); } }
+    .ear-left { transform-box: view-box; transform-origin: 189px 214px; animation: earLeft 5.8s ease-in-out infinite; }
+    .ear-right { transform-box: view-box; transform-origin: 229px 214px; animation: earRight 6.4s ease-in-out infinite; }
+    @keyframes earLeft { 0%, 65%, 100% { transform: rotate(0deg); } 72% { transform: rotate(-9deg); } 79% { transform: rotate(3deg); } 86% { transform: rotate(-4deg); } }
+    @keyframes earRight { 0%, 36%, 62%, 100% { transform: rotate(0deg); } 44% { transform: rotate(8deg); } 52% { transform: rotate(-3deg); } }
+    .eyes { transform-box: fill-box; transform-origin: center; animation: blink 5.2s ease-in-out infinite; }
+    @keyframes blink { 0%, 42%, 48%, 100% { transform: scaleY(1); } 44%, 46% { transform: scaleY(0.08); } }
+    .rabbit-offer { transform-box: view-box; transform-origin: 238px 282px; animation: offerCarrot 4.8s ease-in-out infinite; }
+    @keyframes offerCarrot { 0%, 100% { transform: rotate(4deg); } 45%, 60% { transform: rotate(-7deg); } }
+    .bow-tie { transform-box: fill-box; transform-origin: center; animation: bowLift 3.6s ease-in-out infinite; }
+    @keyframes bowLift { 0%, 100% { transform: rotate(-2deg); } 50% { transform: rotate(2deg); } }
+    .grass { transform-box: fill-box; transform-origin: center bottom; animation: grassSway 4s ease-in-out infinite alternate; }
+    @keyframes grassSway { from { transform: rotate(-4deg); } to { transform: rotate(4deg); } }
+    .mote { animation: floatMote 7s ease-in-out infinite; }
+    @keyframes floatMote { 0%, 100% { opacity: 0; transform: translateY(4px); } 40% { opacity: 0.7; } 80% { opacity: 0; transform: translate(9px, -24px); } }
+
+    .flying-carrot, .payment { opacity: 0; pointer-events: none; }
+    .selling .rabbit-offer { animation: handOver 1250ms ease-in-out both; }
+    .selling .held-carrot { animation: releaseCarrot 1250ms linear both; }
+    .selling .flying-carrot { animation: carrotToBuyer 1250ms ease-in both; }
+    .selling .payment { animation: coinToCounter 1250ms ease-out both; }
+    @keyframes handOver { 0%, 100% { transform: rotate(4deg); } 25%, 65% { transform: translate(5px, 4px) rotate(12deg); } }
+    @keyframes releaseCarrot { 0%, 16%, 90%, 100% { opacity: 1; } 17%, 89% { opacity: 0; } }
+    @keyframes carrotToBuyer {
+      0%, 16% { opacity: 0; transform: translate(268px, 274px) rotate(-18deg) scale(0.8); }
+      18% { opacity: 1; transform: translate(268px, 274px) rotate(-18deg) scale(0.8); }
+      72% { opacity: 1; transform: translate(305px, 380px) rotate(12deg) scale(1.1); }
+      92%, 100% { opacity: 0; transform: translate(318px, 454px) rotate(20deg) scale(1.2); }
+    }
+    @keyframes coinToCounter {
+      0% { opacity: 0; transform: translate(308px, 414px) scale(0.8); }
+      12% { opacity: 1; }
+      48%, 70% { opacity: 1; transform: translate(279px, 307px) scale(1); }
+      90%, 100% { opacity: 0; transform: translate(279px, 307px) scale(1); }
+    }
+
+    .shop-actions { width: 100%; display: flex; flex-direction: column; align-items: center; gap: 10px; }
+    .buy-button {
+      max-width: 100%;
+      min-height: 48px;
+      padding: 12px 26px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 999px;
+      color: #fffaf0;
+      background: var(--green);
+      box-shadow: 0 8px 18px rgba(38, 76, 57, 0.18);
+      font: inherit;
+      font-size: 16px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: transform 150ms ease, background 150ms ease;
+    }
+    .buy-button:hover { background: #254638; }
+    .buy-button:disabled { cursor: default; }
+    .shop-note { min-height: 2.8em; max-width: 350px; margin: 0; color: var(--soft-text); font-size: 14px; font-weight: 650; line-height: 1.4; }
+    [hidden] { display: none !important; }
+
+    @media (max-height: 760px) {
+      body { align-items: flex-start; padding-top: 10px; padding-bottom: 10px; }
+      .story-card { min-height: calc(100svh - 20px); gap: 12px; padding-top: 18px; padding-bottom: 20px; }
+      .scene { width: min(100%, 350px); }
+      h1 { font-size: clamp(27px, 7.4vw, 36px); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .story-card, .scene * { animation: none !important; }
+      .back-link, .buy-button { transition: none; }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <article class="story-card">
+      <nav class="top-nav" aria-label="Навигация по сказкам">
+        <a class="back-link" href="../../">← к сказкам</a>
+      </nav>
+
+      <h1>Как кролик продавал морковку</h1>
+      <p class="subtitle">Кролик поправил белую бабочку и отправился на ярмарку. Он забирал морковку у богатых и жадных и продавал её бедным по скидке.</p>
+
+      <section class="scene" id="scene" aria-label="Солнечная ярмарка: кролик с белым галстуком-бабочкой предлагает морковку за деревянным прилавком">
+        <svg viewBox="0 0 420 440" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="sky" x2="0.2" y2="1">
+              <stop stop-color="#75b9bc" />
+              <stop offset="0.6" stop-color="#d2e4c2" />
+              <stop offset="1" stop-color="#fae5a9" />
+            </linearGradient>
+            <radialGradient id="sunGlow">
+              <stop stop-color="#fff5bb" stop-opacity="0.85" />
+              <stop offset="1" stop-color="#ffefb5" stop-opacity="0" />
+            </radialGradient>
+            <linearGradient id="ground" x2="0" y2="1">
+              <stop stop-color="#ced18c" />
+              <stop offset="1" stop-color="#79955b" />
+            </linearGradient>
+            <linearGradient id="fur" x1="0" y1="0" x2="0.9" y2="1">
+              <stop stop-color="#e9dfcf" />
+              <stop offset="0.48" stop-color="#c9bba8" />
+              <stop offset="1" stop-color="#a79783" />
+            </linearGradient>
+            <radialGradient id="face" cx="38%" cy="30%" r="75%">
+              <stop stop-color="#f3ecdf" />
+              <stop offset="0.7" stop-color="#ddd0bc" />
+              <stop offset="1" stop-color="#b5a48f" />
+            </radialGradient>
+            <linearGradient id="earPink" x2="0.7" y2="1">
+              <stop stop-color="#e6b3a7" />
+              <stop offset="1" stop-color="#c78f86" />
+            </linearGradient>
+            <linearGradient id="bowWhite" x2="0.3" y2="1">
+              <stop stop-color="#ffffff" />
+              <stop offset="0.55" stop-color="#fffefa" />
+              <stop offset="1" stop-color="#d6e1dc" />
+            </linearGradient>
+            <linearGradient id="wood" x2="0" y2="1">
+              <stop stop-color="#c58e50" />
+              <stop offset="1" stop-color="#986035" />
+            </linearGradient>
+            <linearGradient id="carrotOrange" x2="1" y2="0.5">
+              <stop stop-color="#ffba55" />
+              <stop offset="0.4" stop-color="#ee852e" />
+              <stop offset="1" stop-color="#c45526" />
+            </linearGradient>
+            <g id="carrot">
+              <path d="M0 0 C-10 -7 -15 -14 -11 -20 C-4 -19 0 -11 0 0" fill="#477e3d" />
+              <path d="M0 0 C-6 -14 -4 -24 1 -28 C7 -20 7 -9 0 0" fill="#629844" />
+              <path d="M0 0 C3 -14 10 -22 15 -20 C15 -10 7 -3 0 0" fill="#366e38" />
+              <path d="M-8 1 C-10 -8 9 -8 8 1 C7 13 3 29 1 35 Q0 39 -2 34 C-5 23 -8 11 -8 1Z" fill="url(#carrotOrange)" />
+              <path d="M-5 4 L0 5 M3 12 L7 11 M-4 19 L0 20 M0 27 L3 26" fill="none" stroke="#ae5125" stroke-width="1.4" stroke-linecap="round" opacity="0.6" />
+              <path d="M-5 0 Q-5 9 -3 14" fill="none" stroke="#ffe0a0" stroke-width="1.8" stroke-linecap="round" opacity="0.65" />
+            </g>
+            <g id="daisy">
+              <path d="M0 0 Q-4 10 -2 20" fill="none" stroke="#587545" stroke-width="2" />
+              <g fill="#fff9dc">
+                <ellipse cy="-4" rx="2.2" ry="4" />
+                <ellipse cy="4" rx="2.2" ry="4" />
+                <ellipse cx="-4" rx="4" ry="2.2" />
+                <ellipse cx="4" rx="4" ry="2.2" />
+              </g>
+              <circle r="2.7" fill="#e6ac43" />
+            </g>
+          </defs>
+
+          <!-- A bright village fair, with the little carrot stall in front. -->
+          <path d="M0 0H420V440H0Z" fill="url(#sky)" />
+          <circle cx="338" cy="57" r="91" fill="url(#sunGlow)" />
+          <circle cx="338" cy="57" r="24" fill="#fff3be" />
+          <g class="cloud" fill="#fff9de" opacity="0.7">
+            <path d="M28 72 C17 70 20 59 31 57 C31 44 52 40 61 53 C74 48 87 57 86 64 C104 65 105 77 89 78 H34Z" />
+          </g>
+          <g class="cloud cloud-far" fill="#fffae4" opacity="0.52">
+            <path d="M248 91 C232 89 236 77 249 77 C252 65 270 64 278 76 C291 73 301 79 300 86 C315 89 312 96 299 97 H254Z" />
+          </g>
+          <path d="M0 217 Q60 180 123 212 Q201 169 283 209 Q355 169 420 194 V311H0Z" fill="#95b47a" />
+          <path d="M0 252 Q94 213 181 249 Q288 210 420 241 V440H0Z" fill="url(#ground)" />
+          <path d="M189 259 Q246 298 257 343 Q274 397 420 412 V440H194 Q226 378 192 335 Q155 291 166 266Z" fill="#e4cb91" opacity="0.8" />
+
+          <g opacity="0.8">
+            <path d="M-23 208L26 171L75 208Z" fill="#f0cb85" />
+            <path d="M-23 208H75V221H-23Z" fill="#c57751" />
+            <path d="M-12 221V280 M63 221V280" stroke="#8c7550" stroke-width="5" />
+            <path d="M-12 259H63V285H-12Z" fill="#ad874f" />
+            <path d="M352 225L394 186L439 225Z" fill="#6d9a87" />
+            <path d="M351 225H439V237H351Z" fill="#e9d8a2" />
+            <path d="M360 237V293 M427 237V293" stroke="#927147" stroke-width="5" />
+            <path d="M359 274H430V294H359Z" fill="#bb945c" />
+            <g fill="#d49b47"><circle cx="374" cy="271" r="6" /><circle cx="387" cy="269" r="7" /><circle cx="402" cy="271" r="6" /></g>
+          </g>
+
+          <path d="M-9 21 Q210 91 430 19" fill="none" stroke="#6a7655" stroke-width="2" />
+          <g>
+            <path class="pennant" d="M16 29L42 37L24 59Z" fill="#c56e4d" />
+            <path class="pennant" d="M68 44L94 49L77 73Z" fill="#f4d17f" />
+            <path class="pennant" d="M121 54L149 57L133 82Z" fill="#487e70" />
+            <path class="pennant" d="M177 59L205 60L191 86Z" fill="#c56e4d" />
+            <path class="pennant" d="M234 59L262 57L251 84Z" fill="#f4d17f" />
+            <path class="pennant" d="M289 53L317 48L309 77Z" fill="#487e70" />
+            <path class="pennant" d="M345 42L372 35L366 64Z" fill="#c56e4d" />
+            <path class="pennant" d="M393 28L419 20L415 48Z" fill="#f4d17f" />
+          </g>
+
+          <ellipse cx="212" cy="407" rx="167" ry="22" fill="#425438" opacity="0.18" />
+          <path d="M72 121V409 M348 121V409" stroke="#7b502f" stroke-width="10" stroke-linecap="round" />
+          <path d="M70 133V396 M346 133V396" stroke="#c39358" stroke-width="3" stroke-linecap="round" />
+
+          <!-- The striped canvas roof leaves room for both long ears. -->
+          <path d="M95 89H325L368 119H52Z" fill="#fff0c9" />
+          <path d="M95 89H129L108 119H52Z M165 89H199L197 119H153Z M234 89H268L285 119H241Z M302 89H325L368 119H329Z" fill="#bc6747" />
+          <path d="M52 119H368V129Q345 148 324 130Q302 148 279 130Q256 148 234 130Q211 148 189 130Q166 148 144 130Q121 148 98 130Q75 148 52 130Z" fill="#fff0c9" />
+          <path d="M52 119H98V130Q75 148 52 130Z M144 119H189V130Q166 148 144 130Z M234 119H279V130Q256 148 234 130Z M324 119H368V130Q346 148 324 130Z" fill="#bc6747" />
+          <path d="M53 119H367" stroke="#86472f" stroke-width="2" opacity="0.5" />
+          <path d="M97 88H323" stroke="#f8e4b9" stroke-width="4" stroke-linecap="round" />
+
+          <!-- Rabbit: warm grey fur and a white men's bow tie. -->
+          <g class="rabbit-body">
+            <circle cx="164" cy="315" r="19" fill="#e8ddcb" />
+            <path d="M177 273 Q210 253 242 273 Q261 292 254 339H163Q160 297 177 273Z" fill="url(#fur)" />
+            <path d="M179 278Q158 280 153 305Q155 317 168 311L187 290Z" fill="url(#fur)" />
+
+            <g class="rabbit-head">
+              <g class="ear-left">
+                <path d="M179 218C168 200 160 156 174 146C191 138 203 183 198 215Z" fill="url(#fur)" stroke="#aa9782" stroke-width="1" />
+                <path d="M184 205C178 186 171 158 178 155C187 152 193 183 191 207Z" fill="url(#earPink)" />
+                <path d="M178 155Q184 179 187 199" fill="none" stroke="#f4ccbd" stroke-width="2" opacity="0.7" />
+              </g>
+              <g class="ear-right">
+                <path d="M220 213C216 190 227 142 243 147C259 152 244 199 237 220Z" fill="url(#fur)" stroke="#aa9782" stroke-width="1" />
+                <path d="M226 205C226 185 236 154 242 156C249 159 238 191 232 209Z" fill="url(#earPink)" />
+                <path d="M240 158Q234 177 230 197" fill="none" stroke="#f4ccbd" stroke-width="2" opacity="0.7" />
+              </g>
+              <path d="M171 224Q173 205 193 204L199 198L205 203L214 198L219 204Q244 203 251 226Q264 248 246 261Q232 276 210 274Q187 277 173 263Q156 250 171 224Z" fill="url(#face)" />
+              <path d="M178 224Q186 216 195 219 M225 219Q235 215 242 223" fill="none" stroke="#a78e76" stroke-width="2.4" stroke-linecap="round" />
+              <g class="eyes">
+                <ellipse cx="191" cy="234" rx="5.7" ry="7.5" fill="#352c26" />
+                <ellipse cx="231" cy="234" rx="5.7" ry="7.5" fill="#352c26" />
+                <circle cx="189.2" cy="231.3" r="2" fill="#fffdf0" />
+                <circle cx="229.2" cy="231.3" r="2" fill="#fffdf0" />
+                <circle cx="193" cy="237" r="0.9" fill="#b4a590" />
+                <circle cx="233" cy="237" r="0.9" fill="#b4a590" />
+              </g>
+              <ellipse cx="181" cy="250" rx="10" ry="5" fill="#d69587" opacity="0.4" />
+              <ellipse cx="241" cy="250" rx="10" ry="5" fill="#d69587" opacity="0.4" />
+              <ellipse cx="201" cy="254" rx="14" ry="10" fill="#f7eee0" />
+              <ellipse cx="221" cy="254" rx="14" ry="10" fill="#f7eee0" />
+              <path d="M205 245Q211 241 217 245Q216 250 211 252Q206 249 205 245Z" fill="#b77b73" />
+              <path d="M211 252V257M200 258Q205 263 211 257Q217 263 223 257" fill="none" stroke="#816255" stroke-width="1.6" stroke-linecap="round" />
+              <path d="M207 260V267Q211 270 215 267V260Z" fill="#fffdf4" />
+              <path d="M211 261V267" stroke="#d0c3af" stroke-width="1" />
+              <g fill="none" stroke="#927f6d" stroke-width="1.2" stroke-linecap="round" opacity="0.65">
+                <path d="M187 250L164 246 M187 255L161 256 M235 250L257 246 M235 255L260 257" />
+              </g>
+            </g>
+
+            <path d="M190 275Q210 284 231 275" fill="none" stroke="#fffdf6" stroke-width="4" />
+            <g class="bow-tie">
+              <path d="M208 280C199 275 192 270 187 273Q182 282 187 293C193 296 201 289 208 287Z" fill="url(#bowWhite)" stroke="#c8d3ca" stroke-width="1.1" />
+              <path d="M214 280C223 275 230 270 235 273Q240 282 235 293C229 296 221 289 214 287Z" fill="url(#bowWhite)" stroke="#c8d3ca" stroke-width="1.1" />
+              <path d="M190 277L207 283L190 289 M232 277L215 283L232 289" fill="none" stroke="#d7dfd9" stroke-width="1.2" />
+              <rect x="206" y="277" width="10" height="13" rx="4" fill="#ffffff" stroke="#d7dfd9" stroke-width="1" />
+            </g>
+
+            <g class="rabbit-offer">
+              <path d="M239 278Q249 284 262 270Q274 267 278 279Q266 301 248 298Q238 295 235 287Z" fill="url(#fur)" />
+              <g class="held-carrot"><use href="#carrot" transform="translate(269 265) rotate(-18) scale(0.85)" /></g>
+              <path d="M260 273Q265 268 271 273L275 280Q273 288 266 286Q258 283 260 273Z" fill="#e5d8c4" />
+              <path d="M266 275L269 280 M270 273L273 278" fill="none" stroke="#b6a18c" stroke-width="1.2" stroke-linecap="round" />
+            </g>
+          </g>
+
+          <!-- Carrots on the counter, then the front boards in front of the rabbit. -->
+          <path d="M78 319V410 M328 319V410" stroke="#85532f" stroke-width="12" stroke-linecap="round" />
+          <path d="M81 399H328" stroke="#99643a" stroke-width="6" />
+          <path d="M70 319H349V389Q209 399 70 389Z" fill="url(#wood)" />
+          <path d="M73 343H346 M73 370H346" stroke="#7d4c2c" stroke-width="2" opacity="0.5" />
+          <path d="M93 330Q118 327 134 333 M283 356Q319 351 339 357 M85 378Q102 375 126 380" fill="none" stroke="#e2b06d" stroke-width="2" opacity="0.35" />
+          <rect x="61" y="313" width="297" height="13" rx="4" fill="#d5a363" />
+          <path d="M65 317H354" stroke="#f1c88b" stroke-width="2" opacity="0.8" />
+          <g>
+            <use href="#carrot" transform="translate(97 299) rotate(-56) scale(0.68)" />
+            <use href="#carrot" transform="translate(117 297) rotate(-43) scale(0.78)" />
+            <use href="#carrot" transform="translate(137 296) rotate(-33) scale(0.78)" />
+            <use href="#carrot" transform="translate(101 308) rotate(-75) scale(0.68)" />
+            <use href="#carrot" transform="translate(125 308) rotate(-68) scale(0.75)" />
+          </g>
+          <ellipse cx="167" cy="312" rx="13" ry="7" fill="#e3d6c2" />
+          <path d="M162 309L161 314 M167 309V315 M172 309V314" stroke="#b19c84" stroke-width="1.2" stroke-linecap="round" />
+          <g transform="rotate(5 309 297)">
+            <path d="M287 279H333V313H287Z" fill="#fff1cb" stroke="#c6a46b" stroke-width="1" />
+            <text x="300" y="303" text-anchor="middle" font-size="23" font-weight="850" fill="#775634">1</text>
+            <circle cx="318" cy="296" r="8" fill="#e4b656" stroke="#b78637" stroke-width="1.5" />
+            <path d="M318 291V301 M315 292H320 M316 300H321" stroke="#fff0a6" stroke-width="1.5" stroke-linecap="round" />
+          </g>
+          <rect x="134" y="337" width="153" height="45" rx="5" fill="#f6e4b9" transform="rotate(-2 210 360)" />
+          <g fill="#775233" text-anchor="middle" transform="rotate(-2 210 360)">
+            <text x="210" y="356" font-size="16" font-weight="900" letter-spacing="1">МОРКОВКА</text>
+            <text x="210" y="373" font-size="12" font-weight="650">свежая, с грядки</text>
+          </g>
+          <g fill="#65482d" opacity="0.7"><circle cx="81" cy="335" r="2" /><circle cx="339" cy="335" r="2" /><circle cx="81" cy="381" r="2" /><circle cx="339" cy="381" r="2" /></g>
+
+          <!-- Full baskets and little daisies beside the stall. -->
+          <g>
+            <path d="M26 379Q28 345 48 345Q67 345 72 379" fill="none" stroke="#9b723d" stroke-width="5" />
+            <use href="#carrot" transform="translate(30 371) rotate(-22) scale(0.85)" />
+            <use href="#carrot" transform="translate(47 365) rotate(6) scale(0.9)" />
+            <use href="#carrot" transform="translate(62 374) rotate(23) scale(0.78)" />
+            <path d="M18 377H79L71 410Q48 419 26 410Z" fill="#b78b4c" />
+            <path d="M21 385H77 M23 394H75 M26 403H72 M32 380L37 412 M46 380L48 415 M61 380L58 413" fill="none" stroke="#805d33" stroke-width="2" opacity="0.6" />
+            <path d="M19 377H79" stroke="#dfb777" stroke-width="5" stroke-linecap="round" />
+          </g>
+          <g>
+            <use href="#carrot" transform="translate(366 359) rotate(-13) scale(0.85)" />
+            <use href="#carrot" transform="translate(383 356) rotate(12) scale(0.92)" />
+            <use href="#carrot" transform="translate(396 365) rotate(27) scale(0.7)" />
+            <path d="M352 376H410L406 406H356Z" fill="#bc9656" />
+            <path d="M354 381H408 M355 394H407" stroke="#856334" stroke-width="3" />
+            <path d="M359 376V407 M402 376V407" stroke="#dab579" stroke-width="5" />
+          </g>
+          <g class="grass" fill="none" stroke="#557543" stroke-width="3" stroke-linecap="round">
+            <path d="M7 432Q15 409 9 397 M10 434Q23 415 22 407 M104 437Q100 421 92 415 M104 437Q109 421 115 417 M399 439Q397 421 391 416 M401 439Q408 421 416 418" />
+          </g>
+          <g class="grass">
+            <use href="#daisy" transform="translate(24 420) scale(0.85)" />
+            <use href="#daisy" transform="translate(124 409) scale(0.7)" />
+            <use href="#daisy" transform="translate(334 418) scale(0.9)" />
+          </g>
+          <g fill="#fff7c6">
+            <circle class="mote" cx="37" cy="287" r="2" />
+            <circle class="mote" cx="308" cy="218" r="1.7" style="animation-delay: -3s" />
+            <circle class="mote" cx="375" cy="314" r="2" style="animation-delay: -5s" />
+          </g>
+          <g class="payment">
+            <circle r="9" fill="#edc464" stroke="#b08232" stroke-width="1.8" />
+            <circle r="6.2" fill="none" stroke="#ffe7a0" stroke-width="1" />
+            <path d="M0 -4V4M-2 -3L0 -4M-2 4H2" fill="none" stroke="#92682a" stroke-width="1.5" stroke-linecap="round" />
+          </g>
+          <g class="flying-carrot"><use href="#carrot" /></g>
+        </svg>
+      </section>
+
+      <div class="shop-actions" id="shopActions" hidden>
+        <button class="buy-button" id="buyButton" type="button">Купить морковку</button>
+        <p class="shop-note" id="shopNote" role="status" aria-live="polite" aria-atomic="true">Самая сладкая морковка — для тебя.</p>
+      </div>
+    </article>
+  </main>
+
+  <script>
+  (function () {
+    "use strict";
+
+    var scene = document.getElementById("scene");
+    var button = document.getElementById("buyButton");
+    var note = document.getElementById("shopNote");
+    var reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    var replies = [
+      "Спасибо! Держи морковку. Заходи ещё!",
+      "Вот ещё одна — только утром с грядки!",
+      "Для хорошего покупателя — самая хрустящая!"
+    ];
+    var purchases = 0;
+
+    document.getElementById("shopActions").hidden = false;
+
+    button.addEventListener("click", function () {
+      if (button.disabled) return;
+
+      var reply = replies[purchases % replies.length];
+      purchases += 1;
+
+      if (reducedMotion.matches) {
+        note.textContent = reply;
+        return;
+      }
+
+      button.disabled = true;
+      note.textContent = "Кролик выбирает для тебя морковку…";
+      scene.classList.add("selling");
+
+      window.setTimeout(function () {
+        scene.classList.remove("selling");
+        button.disabled = false;
+        note.textContent = reply;
+      }, 1250);
+    });
+  })();
+  </script>
+</body>
+</html>
